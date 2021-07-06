@@ -1,0 +1,619 @@
+import numpy as np
+import cv2
+from PIL import Image
+from  pylab import *
+import matplotlib.pyplot as  plt
+import time as tm
+
+#DNA BASE ENCRIPTION FUNCTION
+def DNA_ENC(x1,x2,ch):
+    if ch==0:
+        if(x1==0 and x2==0):
+            p='A'
+         
+        if(x1==1 and x2==0):
+            p='C'
+        if(x1==0 and x2==1):
+            p='G'
+        if(x1==1 and x2==1):
+            p='T' 
+    if ch==1:
+        if(x1==0 and x2==0):
+            p='A'
+         
+        if(x1==0 and x2==1):
+            p='C'
+          
+        if(x1==1 and x2==0):
+            p='G'
+        if(x1==1 and x2==1):
+            p='T'
+    if ch==2:
+        if(x1==0 and x2==1):
+            p='A'
+         
+        if(x1==1 and x2==1):
+            p='C'
+          
+        if(x1==0 and x2==0):
+            p='G'
+        if(x1==1 and x2==0):
+            p='T'
+    if ch==3:
+        if(x1==0 and x2==1):
+            p='A'
+         
+        if(x1==0 and x2==0):
+            p='C'
+          
+        if(x1==1 and x2==1):
+            p='G'
+        if(x1==1 and x2==0):
+            p='T'
+    if ch==4:
+        if(x1==1 and x2==0):
+            p='A'
+         
+        if(x1==1 and x2==1):
+            p='C'
+          
+        if(x1==0 and x2==0):
+            p='G'
+        if(x1==0 and x2==1):
+            p='T'
+    if ch==5:
+        if(x1==1 and x2==0):
+            p='A'
+         
+        if(x1==0 and x2==0):
+            p='C'
+          
+        if(x1==1 and x2==1):
+            p='G'
+        if(x1==0 and x2==1):
+            p='T'
+    if ch==6:
+        if(x1==1 and x2==1):
+            p='A'
+         
+        if(x1==1 and x2==0):
+            p='C'
+          
+        if(x1==0 and x2==1):
+            p='G'
+        if(x1==0 and x2==0):
+            p='T'
+    if ch==7:
+        if(x1==1 and x2==1):
+            p='A'
+         
+        if(x1==0 and x2==1):
+            p='C'
+          
+        if(x1==1 and x2==0):
+            p='G'
+        if(x1==0 and x2==0):
+            p='T'
+    return(p)
+
+#DNA BASE DECRIPTION FUNCTION
+def DNA_DEC(x1,ch):
+    if ch==0:
+        s=""
+        if(x1=='A'):
+            s=s+'00'
+        if(x1=='C'):
+            s=s+'10'
+        if(x1=='G'):
+            s=s+'01'
+        if(x1=='T'):
+            s=s+'11'
+    if ch==1:
+        s=""
+        if(x1=='A'):
+            s=s+'00'
+        if(x1=='C'):
+            s=s+'01'
+        if(x1=='G'):
+            s=s+'10'
+        if(x1=='T'):
+            s=s+'11'
+    if ch==2:
+        s=""
+        if(x1=='A'):
+            s=s+'01'
+        if(x1=='C'):
+            s=s+'11'
+        if(x1=='G'):
+            s=s+'00'
+        if(x1=='T'):
+            s=s+'10'
+    if ch==3:
+        s=""
+        if(x1=='A'):
+            s=s+'01'
+        if(x1=='C'):
+            s=s+'00'
+        if(x1=='G'):
+            s=s+'11'
+        if(x1=='T'):
+            s=s+'10'
+    if ch==4:
+        s=""
+        if(x1=='A'):
+            s=s+'10'
+        if(x1=='C'):
+            s=s+'11'
+        if(x1=='G'):
+            s=s+'00'
+        if(x1=='T'):
+            s=s+'01'
+    if ch==5:
+        s=""
+        if(x1=='A'):
+            s=s+'10'
+        if(x1=='C'):
+            s=s+'00'
+        if(x1=='G'):
+            s=s+'11'
+        if(x1=='T'):
+            s=s+'01'
+    if ch==6:
+        s=""
+        if(x1=='A'):
+           s=s+'11'
+        if(x1=='C'):
+            s=s+'10'
+        if(x1=='G'):
+            s=s+'01'
+        if(x1=='T'):
+            s=s+'00'
+    if ch==7:
+        s=""
+        if(x1=='A'):
+           s=s+'11'
+        if(x1=='C'):
+            s=s+'01'
+        if(x1=='G'):
+            s=s+'10'
+        if(x1=='T'):
+            s=s+'00'
+    return(s)
+
+
+#CONVERTION FROM  DECIMAL NUMBER TO BINARY NUMBER
+def DEC_BIN(n):
+   binary = format(n, "08b")
+   return(binary)
+
+
+#CONVERTION FROM  BINARY NUMBER TO DECIMAL NUMBER 
+def BIN_DEC(binary):
+    decimal = 0
+    for digit in binary:
+        decimal = decimal*2 + int(digit)
+    return(decimal)
+#CONVERTION FROM  BINARY NUMBER TO DECIMAL NUMBER 
+def BIN_DEC_REV(binary):
+    decimal = 0
+    for digit in range(7,-1,-1):
+        decimal = decimal*2 + int(binary[digit])
+    return(decimal)
+
+
+t=tm.time()
+#read color image
+ii=Image.open('D:\SAI\MYPROJECT\medicalimage.jpg')
+#resize color image
+ii = ii.resize((80,80))
+#convert color image to gray image
+im=array(ii.convert('L'))
+#type(im)
+print(im)
+m,n=im.shape
+im111=np.zeros(im.shape)
+im222=np.zeros(im.shape)
+im333=np.zeros(im.shape)
+
+for i in range(0,m):
+    for j in range(0,n):
+        if im[i,j]%3==0:
+            im111[i,j]=im[i,j]
+        else:
+            im222[i,j]=im[i,j]
+
+A=im111.flatten()
+x1=0.449
+lmd=3.989
+B=zeros(m*n)
+B1=zeros(m*n)
+B2=zeros(m*n)
+A1=zeros(m*n)
+A2=zeros(m*n)
+A3=zeros(m*n)
+im1=np.zeros((m,n))
+im2=np.zeros((m,n))
+im3=np.zeros((m,n))
+for i in range(0,m*n):
+    x2=lmd*x1*(1-x1)
+    B[i]=x2
+    x1=x2
+print("B",B)
+B1=np.sort(B)
+print("B1",B1)
+for i in range(0,m*n):
+    for j in range(0,m*n):
+        if B[i]==B1[j]:
+            B2[i]=j
+
+print("B2",B2)
+
+for i in range(0,m*n):
+    k=round(B2[i])
+    A1[i]=A[k]
+#print("A",A)
+ss = np. reshape(A, (m, n))
+print("original image")
+print(ss)
+#print(A1)
+s = np. reshape(A1, (m, n))
+print("chaotic encryption ")
+
+
+dna=""
+for i in range(0,m):
+    for j in range(0,n):
+        x=int(s[i,j]);
+        ch=x%8
+        #print(x)
+        y=DEC_BIN(x)
+        #print(y)
+        yy=BIN_DEC_REV(y)       
+        #print(yy)
+        im1[i,j]=yy
+        xx=DEC_BIN(yy)
+        #print(xx)
+        x2=""
+        for k in range(1,8,2):
+            x2=x2+DNA_ENC(int(xx[k-1]),int(xx[k]),ch)
+        #print(x2)
+        dna=dna+x2
+        t1=tm.time()
+        sss=""
+        for k in range(0,4):
+            sss=sss+DNA_DEC(x2[k],ch)
+        #print(s)
+        z=BIN_DEC(sss)
+        im2[i,j]=z
+        #print(z)
+        zz=DEC_BIN(z)       
+        #print(zz)
+        zzz=BIN_DEC_REV(zz)
+        #print(zzz)
+        im3[i,j]=zzz
+
+print("bit shift Image")
+print(im1)
+print(" DNA Sequence and Length of DNA")
+print(dna,len(dna))
+print(" bit reverse shift Image")
+print(im2)
+type(im2)
+print("chaotic Decrypted Image")
+print(im3)
+ 
+k=0
+for i in range(0,m):
+    for j in range(0,n):
+        A2[k]=im3[i,j]
+        k=k+1
+#print(A2)
+
+
+#decryption
+
+for i in range(0,k):
+    for j in range(0,k):
+        if i==B2[j]:
+            A3[i]=A2[j]
+#print(A3)
+       
+s1 = np. reshape(A3, (m, n))
+print("finnal Decrypted Image")
+print(s1)
+
+for i in range(0,m):
+    for j in range(0,n):
+        im333[i,j]=im222[i,j]+s1[i,j]
+print(im333)
+
+#img = cv2.imread('D:\SAI\MYPROJECT\medicalimage.jpg')
+#img_cvt = cv2.cvtColor(ii, cv2.COLOR_BGR2RGB)
+
+#plt.imshow(img_cvt)
+#plt.show()
+# Converting RGB image to Grayscale
+gray = im1
+
+#cv2.cvtColor(img_cvt, cv2.COLOR_RGB2GRAY)
+
+#plt.imshow(gray)
+#plt.show()
+type(gray) # ndarray
+#print(gray)
+#print(gray.shape)
+gray = cv2.resize(gray, (256,256))
+#plt.imshow(gray)
+#plt.show()
+gray.shape
+# Function to calculate R1 and R2
+def getRvals(img, L):
+    
+    # Initialization
+    R1 = 0
+    R2 = 0
+    Wdth = img.shape[0]
+    Hght = img.shape[1]
+    
+    for i in range(0, Hght):
+        for j in range(0, Wdth):
+            
+            R1 += pow(-1, i + j) * img[i][j]
+            R2 += pow(-1, i + j + 1) * img[i][j]
+
+    return abs(R1//(Hght*L)), abs(R2//(Wdth*L))
+L = 128 # Assumed in paper
+R1, R2 = getRvals(gray, L)
+R1, R2
+def CreateVectors(img, L):
+    
+    FragsPerRow = img.shape[0]//L
+    vecs = []
+    
+    for tempvecs in img:
+        for i in range(0, FragsPerRow):
+            vecs.append(tempvecs[i*L : (i + 1)*L])
+            
+    return vecs
+# Random Number Generator 
+def RandomNumGen(seed, iters, L):
+    op = seed
+    while iters:
+        op = (29 * seed + 13) % L
+        seed = op
+        iters -= 1
+        
+    return op
+# Crossover Function
+def Crossover(vector, x, y, L):
+    
+    if x < L and y < L:
+        coI = x # Crossover Index
+    else:
+        coI = 0
+        
+    coIter = int((13 * x + 17 * y) % L)
+
+    
+    for j in range(0, coIter, 2):
+        
+        N1 = int(RandomNumGen(coI, j, L))
+        N2 = int(RandomNumGen(coI, j + 1, L))
+        temp = vector[N1]
+        vector[N1] = vector[N2]
+        vector[N2] = temp
+        
+    return vector
+# Mutation Function
+def Mutation(vector, x, y, L):
+    
+    if x < L and y < L:
+        muI = y # Mutation Index
+    else:
+        muI = 0
+        
+    muIter = int((23 * x + 29 * y) % L)
+    
+    for j in range(0, muIter):
+        
+        N1 = int(RandomNumGen(muI, j, L))
+        
+        vector[N1] = 255 - vector[N1]
+        
+    return vector
+    
+# Driver Code
+
+ImgVector = CreateVectors(gray, L)
+
+for i in range(0, len(ImgVector)):
+    
+    ImgVector[i] = Crossover(ImgVector[i], R1, R2, L)
+    ImgVector[i] = Mutation(ImgVector[i], R1, R2, L)
+    R1 += 1
+    R2 += 1
+
+Wdth = gray.shape[0]
+Hght = gray.shape[1]
+CryptImg = np.zeros((Hght, Wdth))
+count = 0
+
+for i in range(0, len(CryptImg)):
+    
+    temp = np.append([], ImgVector[count*(Wdth//L) : (count + 1)*(Wdth//L)])
+    count += 1
+    CryptImg[i] = temp
+
+#plt.title("Encrypted Image")    
+#plt.imshow(CryptImg)
+#plt.show()
+#cv2.imwrite("output_GA.jpg", gray)
+
+
+
+#decription algorithm
+
+
+
+# Function to calculate R1 and R2
+def getRvals(CryptImg, L):
+    
+    # Initialization
+    R1 = 0
+    R2 = 0
+    Wdth = CryptImg.shape[0]
+    Hght = CryptImg.shape[1]
+    
+    for i in range(0, Hght):
+        for j in range(0, Wdth):
+            
+            R1 += pow(-1, i + j) * CryptImg[i][j]
+            R2 += pow(-1, i + j + 1) * CryptImg[i][j]
+
+    return abs(R1//(Hght*L)), abs(R2//(Wdth*L))
+L = 128 # Assumed in paper
+R1, R2 = getRvals(gray, L)
+R1, R2
+def CreateVectors(CryptImg, L):
+    
+    FragsPerRow = CryptImg.shape[0]//L
+    vecs = []
+    
+    for tempvecs in CryptImg:
+        for i in range(0, FragsPerRow):
+            vecs.append(tempvecs[i*L : (i + 1)*L])
+            
+    return vecs
+# Random Number Generator 
+def RandomNumGen(seed, iters, L):
+    op = seed
+    while iters:
+        op = (29 * seed + 13) % L
+        seed = op
+        iters -= 1
+        
+    return op
+# Crossover Function
+def Crossover(vector, x, y, L):
+    
+    if x < L and y < L:
+        coI = x # Crossover Index
+    else:
+        coI = 0
+        
+    coIter = int((13 * x + 17 * y) % L)
+    
+    for j in range(0, coIter, 2):
+        
+        N1 = int(RandomNumGen(coI, j, L))
+        N2 = int(RandomNumGen(coI, j + 1, L))
+        temp = vector[N1]
+        vector[N1] = vector[N2]
+        vector[N2] = temp
+        
+    return vector
+# Mutation Function
+def Mutation(vector, x, y, L):
+    
+    if x < L and y < L:
+        muI = y # Mutation Index
+    else:
+        muI = 0
+        
+    muIter = int((23 * x + 29 * y) % L)
+    for j in range(0, muIter):
+        
+        N1 = int(RandomNumGen(muI, j, L))
+        
+        vector[N1] = 256 - vector[N1]
+        
+    return vector
+    
+# Driver Code
+
+ImgVector = CreateVectors(gray, L)
+
+for i in range(0, len(ImgVector)):
+    
+    ImgVector[i] = Crossover(ImgVector[i], R1, R2, L)
+    ImgVector[i] = Mutation(ImgVector[i], R1, R2, L)
+    R1 += 1
+    R2 += 1
+
+Wdth = gray.shape[0]
+Hght = gray.shape[1]
+CryptImg1 = np.zeros((Hght, Wdth))
+count = 0
+
+for i in range(0, len(CryptImg1)):
+    
+    temp = np.append([], ImgVector[count*(Wdth//L) : (count + 1)*(Wdth//L)])
+    count += 1
+    CryptImg1[i] = temp
+    type(CryptImg1)
+
+plt.title("Decrypted Image")    
+plt.imshow(CryptImg1)
+plt.show()
+cv2.imwrite("output_GA.jpg", gray)
+
+t1=tm.time()
+print("encryption and decryption time",(t1-t))
+plt.subplot(3,3,1)
+plt.imshow(ii)
+plt.title("original")
+#plt.show()
+plt.subplot(3,3,2)
+im=Image.fromarray(im)
+plt.imshow(im.convert('RGB'))
+plt.title("gray image  ")
+#plt.show()
+plt.subplot(3,3,3)
+ss=Image.fromarray(ss)
+plt.imshow(ss.convert('RGB'))
+plt.title("selected gray  image")
+plt.subplot(3,3,4)
+s=Image.fromarray(s)
+plt.imshow(s.convert('RGB'))
+plt.title("chaostic encrypt image  ")
+#plt.show()
+plt.subplot(3,3,5)
+#im11=Image.fromarray(im1)
+plt.imshow(CryptImg)
+plt.title(" Genetic encrypt image")
+#plt.show()
+plt.subplot(3,3,6)
+#im21=Image.fromarray(im2)
+plt.imshow(CryptImg1)
+plt.title("Genetic decrypt Image")    
+#plt.show()
+plt.subplot(3,3,7)
+im31=Image.fromarray(im3)
+plt.imshow(im31.convert('RGB'))
+plt.title("chaostic decrypt image e")
+#plt.show()         
+plt.subplot(3,3,8)
+s2=Image.fromarray(s1)
+plt.imshow(s2.convert('RGB'))
+plt.title("finalselected  decrypted image")
+plt.subplot(3,3,9)
+im333=Image.fromarray(im333)
+plt.imshow(im333.convert('RGB'))
+plt.title("final decrypted image")
+plt.show()
+plt.title("histogram of original RED and encrypted BLUE Image")
+plt.xlabel("gray level values")
+plt.ylabel("gray level count")
+histogram, bin_edges = np.histogram(im, bins=256, range=(0, 256))
+plt.plot( histogram,color="red")
+histogram1, bin_edges1= np.histogram(im2, bins=256, range=(0, 256))
+plt.plot( histogram1, color="blue")
+plt.show()
+
+       
+
+    
+
+
+       
+
